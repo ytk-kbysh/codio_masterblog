@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Flask Blog</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Edit the Post?</h1>
+    {% for post in posts %}
+        {% if post["id"]  == post_id %}
+            <h2>{{ post['title'] }}</h2>
+            <div class="post">
+                <p><em>Written by {{ post['author'] }}</em></p>
+                <p>{{ post['content'] }}</p>
+            </div>
+            <form method="post">
+                <label for="content">Content:</label>
+                <textarea id="content" name="content" required rows="8" cols="50"></textarea><br><br>
+                <input type="submit" value="Submit">
+            </form>
+        {% endif %}
+    {% endfor %}
+    <br><br>
+    <form method="get", action="{{ url_for('index') }}">
+        <button type="submit">Go back to the main page.</button>
+    </form>
+</body>
+</html>

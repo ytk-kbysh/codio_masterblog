@@ -65,21 +65,36 @@ def delete(post_id: int):
         return redirect(url_for('index'))
     
 
-# @app.route('/update/<int:post_id>', methods=['GET', 'POST'])
-# def update(post_id):
-#     # Fetch the blog posts from the JSON file
-#     post = fetch_post_by_id(post_id)
-#     if post is None:
-#         # Post not found
-#         return "Post not found", 404
-    
-#     if request.method == 'POST':
-#         # Update the post in the JSON file
-#         # Redirect back to index
+@app.route('/update/<int:post_id>', methods=['GET', 'POST'])
+def update(post_id2):
 
-#     # Else, it's a GET request
-#     # So display the update.html page
-#     return render_template('update.html', post=post)
+    post = fetch_post_by_id(post_id2)
+    if post is None:
+        # Post not found
+        return "Post not found", 404
+    
+    if request.method == 'POST':
+        post_id = request.form.get('post_id')
+        author = request.form.get('author')
+        title = request.form.get('title')
+        new_content = request.form.get('new_content')
+        with open('database.json') as f:
+            blog_posts = json.load(f)
+
+        blog_posts = [post for post in blog_posts if post['id'] != post_id]
+
+        new_item = {"id": post_id, "author": author, "title": title,"content": new_content}
+
+        blog_posts.append(new_item)
+
+        with open('database.json', 'w') as f:
+            json.dump(blog_posts, f, indent=4)
+
+        return redirect(url_for('index'))
+
+    # Else, it's a GET request
+    # So display the update.html page
+    return render_template('update.html', post=post)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=4999)
