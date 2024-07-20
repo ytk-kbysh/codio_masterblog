@@ -9,11 +9,19 @@
 <body>
     <h1>Welcome to My Flask Blog!</h1>
     {% for post in posts %}
+    <h2>{{ post['title'] }}</h2>
     <div class="post">
-        <h2>{{ post['title'] }}</h2>
         <p><em>Written by {{ post['author'] }}</em></p>
         <p>{{ post['content'] }}</p>
     </div>
+    <form method="post">
+        <input type="checkbox" name="post_id" value="{{ post['id'] }}">
+        <button type="submit">Delete the post.</button>
+    </form>
     {% endfor %}
+    <br><br>
+    <form method="get", action="{{ url_for('add') }}">
+        <button type="submit">Add a post.</button>
+    </form>
 </body>
 </html>
